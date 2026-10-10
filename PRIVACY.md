@@ -10,9 +10,12 @@ explains what leaves your computer, what does not, and what we keep.
 - **Your notes.** Every note is stored only on your PC, in `notes.json` inside
   the app's data folder (`%APPDATA%\Voice to List`, the app's original name).
   We never upload, sync, or read your notes.
-- **Your settings and API key.** If you enter your own OpenAI or OpenRouter
-  key, it is stored encrypted on your PC (Windows credential encryption via
-  Electron `safeStorage`). It is only sent to the provider you chose.
+- **Your settings and license key.** On first start the app receives a
+  license key for its free trial from our server and stores it encrypted on
+  your PC (Windows credential encryption via Electron `safeStorage`). For
+  that request the app generates a random **device id** (a UUID, not tied to
+  your hardware, your Microsoft account or your name) and keeps it in its
+  settings file; it is used only so that each install gets one trial.
 - **A local log file** (`app.log`, same folder) with technical events such as
   "recording started" and error messages. It does not contain audio or the
   text of your notes. You decide whether to attach it to a bug report.
@@ -23,26 +26,29 @@ Voxnote records the microphone **only while you are dictating** (between the
 two presses of the hotkey, or while "Listen" is on). Nothing is recorded in
 the background.
 
-Where the recording goes depends on the mode you use:
+Where the recording goes:
 
 | Mode | Audio is sent to | Why |
 |------|------------------|-----|
-| Windows dictation (default, `Win+H`) | Microsoft, under Microsoft's own terms | Voxnote is not involved; Windows handles the speech recognition. |
-| Your own OpenAI / OpenRouter key | OpenAI or OpenRouter directly | To transcribe the recording. Their privacy terms apply. |
-| Voxnote license key (`vtl-…`) | Our server, which forwards it to OpenAI or OpenRouter | To transcribe the recording with our account, so you do not need your own key. |
+| Voxnote hotkeys (trial or subscription) | Our server, which forwards it to OpenAI or OpenRouter | To transcribe the recording with our account; you never need your own key. |
+| Windows dictation (`Win+H`) | Microsoft, under Microsoft's own terms | Voxnote is not involved; Windows handles the speech recognition. |
 
-With a license key, the "Clean up" and "Translate to" options also send the
-**transcribed text** (not the audio) from our server to OpenAI for processing.
+The "Clean up" and "Translate to" options also send the **transcribed text**
+(not the audio) from our server to the language-model provider for processing.
 
-## Our server (license-key users only)
+## Our server
 
 - **Audio is not stored.** The server forwards the recording to the
   transcription provider and returns the text. It does not write audio or
   transcripts to disk.
-- **Usage counting.** For each license key the server keeps the key itself, a
-  label we set when issuing it (usually the e-mail address the key was sold
-  to), when it was created, and the number of minutes used per day and per
-  month. This is needed to enforce the fair-use limits.
+- **Usage counting.** For each license key the server keeps the key itself,
+  the device id described above, when it was created, the trial or
+  subscription end date, and the number of minutes used per day and per
+  month. This is needed to enforce the trial and the fair-use limits.
+- **Subscriptions.** Payment is handled entirely by the Microsoft Store; we
+  never see your card or billing details. After a purchase the app tells our
+  server only that a subscription is active and until when (the expiry date
+  Windows reports), so your key keeps working.
 - **Error logs.** The server logs technical errors (time, request path, error
   message). These logs do not contain audio or text.
 - **Third parties.** Our server currently sends audio and text to
@@ -52,9 +58,8 @@ With a license key, the "Clean up" and "Translate to" options also send the
 
 ## Updates
 
-On start the app asks GitHub whether a newer version exists (a request for a
-small version file). Nothing is downloaded until you click "Download". This
-request reveals your IP address to GitHub, like any web request.
+The app is installed and updated by the Microsoft Store. It does not contact
+GitHub or any other update server itself.
 
 ## No analytics, no ads, no accounts
 
@@ -70,14 +75,16 @@ their consent under the laws that apply to you; that is your responsibility.**
 ## Your choices and rights
 
 - Delete your notes: delete the cards in the app or remove `notes.json`.
-- Stop all network use: use Windows dictation mode and remove any API or
-  license key from Settings.
-- Delete server-side data: contact us and we will revoke the key and remove
-  its usage record.
-- For users in the EU/EEA and the UK: we process license-key usage data to
-  provide the service you bought (performance of a contract). It is kept
-  while the key is active and deleted on request. You can ask for access,
-  correction or deletion through the contact below.
+- Stop all network use: uninstall the app, or do not press the hotkeys and
+  use Windows dictation (`Win+H`) instead.
+- Delete server-side data: contact us with your device id (in `config.json`)
+  and we will revoke the key and remove its usage record.
+- Cancel a subscription: at <https://account.microsoft.com/services>, like
+  any Microsoft Store subscription.
+- For users in the EU/EEA and the UK: we process the device id and usage
+  data to provide the trial and the service you subscribed to (performance of
+  a contract). It is kept while the key is active and deleted on request. You
+  can ask for access, correction or deletion through the contact below.
 
 ## Changes
 
