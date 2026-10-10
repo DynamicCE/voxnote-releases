@@ -46,9 +46,12 @@ The "Clean up" and "Translate to" options also send the **transcribed text**
   subscription end date, and the number of minutes used per day and per
   month. This is needed to enforce the trial and the fair-use limits.
 - **Subscriptions.** Payment is handled entirely by the Microsoft Store; we
-  never see your card or billing details. After a purchase the app tells our
-  server only that a subscription is active and until when (the expiry date
-  Windows reports), so your key keeps working.
+  never see your card or billing details. After a purchase, and on later
+  starts, the app gives our server a purchase key issued by Windows for your
+  Store account; the server uses it to ask Microsoft whether your Voxnote
+  subscription is active and until when, and stores only that answer (the
+  expiry date), so your key keeps working. The key reveals no name, e-mail
+  or payment data to us.
 - **Error logs.** The server logs technical errors (time, request path, error
   message). These logs do not contain audio or text.
 - **Third parties.** Our server currently sends audio and text to
